@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hope Invoice</title>
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    .invoice-container {
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+      border: 2px solid #000;
+    }
+    h2, h3, h4 {
+      margin: 4px;
+    }
+    .row {
+      display: flex;
+      justify-content: space-between;
+      margin: 10px 0;
+    }
+    .row label {
+      margin-right: 5px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    th, td {
+      padding: 6px;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    input[type="text"], input[type="number"] {
+      width: 90%;
+      border: none;
+      text-align: center;
+    }
+    .total-row td {
+      font-weight: bold;
+    }
+    .button-row {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 15px;
+    }
+    button {
+      padding: 8px 16px;
+      font-weight: bold;
+    }
+.cssbuttons-io-button {
+  display: flex;
+  align-items: center;
+  font-family: inherit;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 17px;
+  padding: 0.8em 1.5em 0.8em 1.2em;
+  color: white;
+  background: #ad5389;
+  background: linear-gradient(
+    0deg,
+    rgb(1, 72, 71) 0%,
+    rgb(25, 202, 246) 100%
+  );
+  border: none;
+  box-shadow: 0 0.7em 1.5em -0.5em #4d36d0be;
+  letter-spacing: 0.05em;
+  border-radius: 20em;
+}
+
+.cssbuttons-io-button svg {
+  margin-right: 8px;
+}
+
+.cssbuttons-io-button:hover {
+  box-shadow: 0 0.5em 1.5em -0.5em #4d36d0be;
+}
+
+.cssbuttons-io-button:active {
+  box-shadow: 0 0.3em 1em -0.5em #4d36d0be;
+}
+
+  </style>
+</head>
+<body>
+
+<div class="invoice-container" id="invoice">
+  <h2>Happy Readymade & Dailywear</h2>
+  <h4>Eazy Bazar, Kudukkimotta</h4>
+  <h4>Ph: 9446268381</h4>
+  <h3>INVOICE</h3>
+
+  <div class="row">
+    <div><strong>Invoice No:</strong> <span id="invoiceNo"></span></div>
+    <div><strong>Date:</strong> <span id="invoiceDate"></span></div>
+  </div>
+
+  <div class="row">
+    <label for="customerName"><strong>Name:</strong></label>
+    <input type="text" placeholder="Customer Name" id="customerName" required>
+  </div>
+
+  <table id="invoiceTable">
+    <thead>
+      <tr>
+        <th>Sl No</th>
+        <th >Particulars</th>
+        <th >Rate ₹</th>
+        <th>Qty</th>
+        <th>Amount ₹</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody">
+      <!-- Rows will be added here -->
+    </tbody>
+    <tfoot>
+      <tr class="total-row">
+        <td colspan="4" style="text-align:right">Total:</td>
+        <td id="totalAmount">0.00</td>
+      </tr>
+      <tr>
+        <td colspan="4" style="text-align: right;font-weight: bold;"><strong>Subtotal:</strong></td>
+        <td><input type="number" id="subtotal" value="0" style="width: 100%;font-weight: bold;"></td>
+      </tr>
+    </tfoot>
+  </table>
+
+  
+
+  <div class="actions" style="display: flex; justify-content: space-between; margin-top: 20px;">
+<!--     <button onclick="addRow()">Add Row</button>
+ -->    <!-- From Uiverse.io by adamgiebl --> 
+<button class="cssbuttons-io-button" onclick="addRow()">
+    <svg
+      height="12"
+      width="10"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M0 0h24v24H0z" fill="none"></path>
+      <path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z" fill="currentColor"></path>
+    </svg>
+    <span>More item</span>
+  </button>
+  
+   <!--  <button onclick="saveAsImage()">Print</button> -->
+   <button class="cssbuttons-io-button"  onclick="saveAsImage()">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width="15"
+      height="15"
+    >
+      <path fill="none" d="M0 0h24v24H0z"></path>
+      <path
+        fill="currentColor"
+        d="M1 14.5a6.496 6.496 0 0 1 3.064-5.519 8.001 8.001 0 0 1 15.872 0 6.5 6.5 0 0 1-2.936 12L7 21c-3.356-.274-6-3.078-6-6.5zm15.848 4.487a4.5 4.5 0 0 0 2.03-8.309l-.807-.503-.12-.942a6.001 6.001 0 0 0-11.903 0l-.12.942-.805.503a4.5 4.5 0 0 0 2.029 8.309l.173.013h9.35l.173-.013zM13 12h3l-4 5-4-5h3V8h2v4z"
+      ></path>
+    </svg>
+    <span>Download</span>
+  </button>
+  </div>
+
+  <div style="margin-top: 20px;">
+    <label for="payment-method">Payment Mode:</label>
+    <select id="payment-method" style="width: 100px; padding: 5px;">
+      <option value="cash">Cash</option>
+      <option value="upi">UPI</option>
+    </select>
+  </div>
+  
+
+  <p style="text-align: center; font-size: 14px; margin-top: 30px;">
+    <strong>Note:</strong> No refund policy. Please avoid exchanges.
+  </p>
+
+</div>
+
+<script>
+    function generateInvoiceNumber() {
+      const now = new Date();
+      const date = String(now.getDate()).padStart(2, '0') +
+                   String(now.getMonth() + 1).padStart(2, '0');
+      const time = String(now.getHours()).padStart(2, '0') +
+                    String(now.getMinutes()).padStart(2 , '0')+
+                   String(now.getSeconds()).padStart(2, '0');
+      return ""  + time;
+    }
+  
+    function setInvoiceDetails() {
+      document.getElementById("invoiceNo").textContent = generateInvoiceNumber();
+      const today = new Date();
+  
+      let day = String(today.getDate()).padStart(2, '0');
+      let month = String(today.getMonth() + 1).padStart(2, '0');
+      let year = today.getFullYear();
+  
+      const formattedDate = `${day}/${month}/${year}`;
+      document.getElementById("invoiceDate").textContent = formattedDate;
+    }
+  
+    function addRow() {
+      const table = document.getElementById("tableBody");
+      const row = table.insertRow();
+      const slNo = table.rows.length;
+  
+      row.innerHTML = `
+        <td>${slNo}</td>
+        <td><input type="text" /></td>
+        <td><input type="number" min="0" required oninput="calculateAmount(this)" /></td>
+        <td><input type="number" min="0" required oninput="calculateAmount(this)" /></td>
+        <td>0.00</td>
+      `;
+    }
+  
+    function calculateAmount(input) {
+      const row = input.closest("tr");
+      const rateInput = row.cells[2].querySelector("input");
+      const qtyInput = row.cells[3].querySelector("input");
+  
+      const rate = parseFloat(rateInput.value);
+      const qty = parseFloat(qtyInput.value);
+  
+      if (isNaN(rate) || isNaN(qty)) {
+        row.cells[4].textContent = "0.00";
+        return;
+      }
+  
+      const amount = rate * qty;
+      row.cells[4].textContent = amount.toFixed(2);
+      calculateTotal();
+    }
+  
+    function calculateTotal() {
+      const rows = document.querySelectorAll("#tableBody tr");
+      let total = 0;
+  
+      rows.forEach(row => {
+        const amount = parseFloat(row.cells[4].textContent) || 0;
+        total += amount;
+      });
+  
+      document.getElementById("totalAmount").textContent = total.toFixed(2);
+      document.getElementById("subtotal").value = total.toFixed(2);  // Update the subtotal input
+    }
+  
+    function saveAsImage() {
+      const tableBody = document.querySelector("#tableBody");
+      const rows = tableBody.querySelectorAll("tr");
+      let validItemExists = false;
+  
+      document.querySelector(".actions").style.display = "none";
+  
+      const rowsToRemove = [];
+  
+      rows.forEach(row => {
+        const rate = row.cells[2].querySelector("input").value.trim();
+        const qty = row.cells[3].querySelector("input").value.trim();
+  
+        if (rate && qty) {
+          validItemExists = true;
+        } else if (rate || qty) {
+          alert("Please fill both Rate and Qty for each item.");
+          document.querySelector(".actions").style.display = "flex";
+          return;
+        } else {
+          rowsToRemove.push(row);
+        }
+      });
+  
+      if (!validItemExists) {
+        alert("At least one valid item is required.");
+        document.querySelector(".actions").style.display = "flex";
+        return;
+      }
+  
+      rowsToRemove.forEach(row => row.remove());
+  
+      html2canvas(document.querySelector("#invoice")).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "invoice.jpg";
+        link.href = canvas.toDataURL("image/jpeg");
+        link.click();
+  
+        rowsToRemove.forEach(row => tableBody.appendChild(row));
+        document.querySelector(".actions").style.display = "flex";
+      });
+    }
+  
+    // Initialize
+    setInvoiceDetails();
+    for (let i = 0; i < 5; i++) addRow();
+  </script>
+  
+
+</body>
+</html>
