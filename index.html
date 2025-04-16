@@ -275,12 +275,15 @@
       document.getElementById("subtotal").value = total.toFixed(2);  // Update the subtotal input
     }
   
-    document.addEventListener("keydown", function (e) {
-  if (e.key === "Enter") {
-    e.preventDefault(); // prevent accidental form submissions
-    saveAsImage();      // your existing download function
-  }
-});
+    window.onload = function () {
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      saveAsImage();
+    }
+  });
+};
+
 
     function saveAsImage() {
       const tableBody = document.querySelector("#tableBody");
